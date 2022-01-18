@@ -3,14 +3,6 @@
 #include <conio.h>
 #include <stdbool.h>
 
-size_t textLen(char* text) {
-	return sizeof(text) / sizeof(text[0]);
-}
-
-size_t charListLen(char* charList) {
-	return sizeof(charList) / sizeof(charList[0]);
-}
-
 /* Lista pierwiastkow (ich symboli) z tablicy Mendelejewa
 (numer indeksu w tablicy odpowiada liczbie atomowej pierwiastka) */
 
@@ -41,13 +33,23 @@ char* charList[] = { '\0',
 	'Lv', 'Ts', 'Og', '\0'
 };
 
+size_t textLen(char* text) {
+	return sizeof(text) / sizeof(text[0]);
+}
+
+size_t charListLen(char* charList) {
+	return sizeof(charList) / sizeof(charList[0]);
+}
+
 bool isEncodable(char* text, char charList[]) {
 	for (size_t i = 0; i < textLen(text); i++) {
-		if (text[i] != charList[i] && charList[i] == NULL) {
+		if ((text[i] != charList[i]) && 
+			(charList[i] == NULL)) 
+		{
 			return false;
-		}
-		return true;
+		} 
 	}
+	return true;
 }
 
 
@@ -61,22 +63,33 @@ void checkText(char* text, char charList[])
 	{
 		printf("Nie da sie zaszyfrowac danego tekstu");
 	}
+	printf("Wprowadzony tekst: %s", text);
 }
 
-void encode(char* text, char charList[], int k) {
-	char* encodedText;
-	int* result;
+void encode(char* text, char charList[]) {
+	char* encodedText = (char*)malloc(sizeof(encodedText));
+	int* result = (int*)malloc(sizeof(result));
 	for (int i = 0; i < textLen(text); i++) {
-		if (text[i] == charList[i]) {
+		if ((text[i] == charList[i]) && 
+			(text[i] != NULL) &&
+			(charList[i] !=NULL)) 
+		{
+			if (text[i] == ' ') {
+				encodedText += '**';
+			}
 			result += strcspn(charList, charList[i]);
+			encodedText += (char)result + '*';
 		}
 	}
 }
 
 int main() {
 	char* text = (char*)malloc(sizeof(text));
+	char* charList = charList;
 	printf("Program szyfrujacy podany tekst\n");
 	printf("Wprowadz tekst: ");
+	scanf_s("%s", &text);
+	checkText(text, charList);
 
 	return 0;
 }
