@@ -3,6 +3,17 @@
 #include <conio.h>
 #include <stdbool.h>
 
+#define typename(x)_Generic((x), \
+\
+	_Bool: TYPENAME_BOOL, \
+	int: TYPENAME_INT \  
+)
+
+enum t_typename {
+	TYPENAME_BOOL
+	TYPENAME_INT
+};
+ 
 /* Lista pierwiastkow (ich symboli) z tablicy Mendelejewa
 (numer indeksu w tablicy odpowiada liczbie atomowej pierwiastka) */
 
@@ -42,8 +53,10 @@ size_t charListLen(char charList[]) {
 }
 
 bool isEncodable(char* text, char charList[]) {
+	char* char_node;
 	for (size_t i = 0; i < textLen(text); i++) {
-		if (((text[i] && text[i+1]) || (text[i]) == charList[i]) &&
+		char_node = text[i] + text[i + 1];
+		if ((char_node || (text[i]) == charList[i]) &&
 			(charList[i] != NULL)) 
 		{
 			return true;
@@ -67,12 +80,14 @@ void checkText(char* text, char* charList)
 
 char* encodedText(char* text, char* result, char* charList) {
 	int charIndex;
+	char* char_node;
 	for (int i = 0; i < textLen(text); i++) {
+		char_node = text[i] + text[i + 1];
 		if (!isEncodable(text, charList)) {
 			return 0;
 		}
-		if (((text[i] && text[i+1]) || (text[i]) == charList[i]) &&
-			((text[i] && text[i+1]) || (text[i]) != NULL) &&
+		if ((char_node || (text[i]) == charList[i]) &&
+			(char_node || (text[i]) != NULL) &&
 			(charList[i] != NULL))
 		{
 			if (text[i] == ' ') {
