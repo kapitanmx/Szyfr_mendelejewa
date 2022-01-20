@@ -3,16 +3,6 @@
 #include <conio.h>
 #include <stdbool.h>
 
-#define typename(x)_Generic((x), \
-\
-	_Bool: TYPENAME_BOOL, \
-	int: TYPENAME_INT \  
-)
-
-enum t_typename {
-	TYPENAME_BOOL
-	TYPENAME_INT
-};
  
 /* Lista pierwiastkow (ich symboli) z tablicy Mendelejewa
 (numer indeksu w tablicy odpowiada liczbie atomowej pierwiastka) */
@@ -65,18 +55,6 @@ bool isEncodable(char* text, char charList[]) {
 	return false;
 }
 
-void checkText(char* text, char* charList)
-{
-	if (text == NULL) 
-	{
-		printf("Brak wprowadzonego tekstu. Wprowadz tekst.");
-	}
-	if (!isEncodable(text, charList)) 
-	{
-		printf("Nie da sie zaszyfrowac danego tekstu");
-	}
-	printf("Wprowadzony tekst: %s", text);
-}
 
 char* encodedText(char* text, char* result, char* charList) {
 	int charIndex;
@@ -106,7 +84,14 @@ int main() {
 	printf("Program szyfrujacy podany tekst\n");
 	printf("Wprowadz tekst: ");
 	scanf_s("%s", &text);
-	checkText(text, charList);
+	if (text == NULL) {
+		printf("Brak wprowadzonego tekstu. Wprowadz tekst.");
+		return 0;
+	}
+	if (!isEncodable(text, charList)) {
+		printf("Zaszyfrowanie podanego tekstu jest niemo¿liwe."); 
+		return 0;
+	}
 	printf("Wprowadzony tekst: %s\n", text);
 	printf("Tekst po zaszyfrowaniu: %s\n", encodedText(text, result, charList));
 	return 0;
