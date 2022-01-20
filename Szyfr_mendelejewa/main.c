@@ -3,7 +3,6 @@
 #include <conio.h>
 #include <stdbool.h>
 
-
 /* Lista pierwiastkow (ich symboli) z tablicy Mendelejewa
 (numer indeksu w tablicy odpowiada liczbie atomowej pierwiastka) */
 
@@ -44,7 +43,7 @@ size_t charListLen(char charList[]) {
 
 bool isEncodable(char* text, char charList[]) {
 	for (size_t i = 0; i < textLen(text); i++) {
-		if (((text[i] && text[i+1]) == charList[i]) &&
+		if (((text[i] && text[i+1]) || (text[i]) == charList[i]) &&
 			(charList[i] != NULL)) 
 		{
 			return true;
@@ -72,8 +71,8 @@ char* encodedText(char* text, char* result, char* charList) {
 		if (!isEncodable(text, charList)) {
 			return 0;
 		}
-		if (((text[i] && text[i+1]) == charList[i]) &&
-			((text[i] && text[i+1]) != NULL) &&
+		if (((text[i] && text[i+1]) || (text[i]) == charList[i]) &&
+			((text[i] && text[i+1]) || (text[i]) != NULL) &&
 			(charList[i] != NULL))
 		{
 			if (text[i] == ' ') {
