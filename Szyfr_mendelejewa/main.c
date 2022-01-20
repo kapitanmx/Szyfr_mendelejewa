@@ -3,10 +3,11 @@
 #include <conio.h>
 #include <stdbool.h>
 
+
 /* Lista pierwiastkow (ich symboli) z tablicy Mendelejewa
 (numer indeksu w tablicy odpowiada liczbie atomowej pierwiastka) */
 
-char* charList[] = { '\0',
+const char *charList[] = {
 	'H', 'He', 'Li', 'Be', 'B',
 	'C', 'N', 'O', 'F', 'Ne',
 	'Na', 'Mg', 'Al', 'Si', 'P', 
@@ -37,23 +38,22 @@ size_t textLen(char* text) {
 	return sizeof(text) / sizeof(text[0]);
 }
 
-size_t charListLen(char* charList) {
+size_t charListLen(char charList[]) {
 	return sizeof(charList) / sizeof(charList[0]);
 }
 
 bool isEncodable(char* text, char charList[]) {
 	for (size_t i = 0; i < textLen(text); i++) {
-		if ((text[i] != charList[i]) && 
-			(charList[i] == NULL)) 
+		if ((text[i] == charList[i]) && 
+			(charList[i] != NULL)) 
 		{
-			return false;
+			return true;
 		} 
 	}
-	return true;
+	return false;
 }
 
-
-void checkText(char* text, char charList[])
+void checkText(char* text, char* charList)
 {
 	if (text == NULL) 
 	{
@@ -66,30 +66,35 @@ void checkText(char* text, char charList[])
 	printf("Wprowadzony tekst: %s", text);
 }
 
-void encode(char* text, char charList[]) {
-	char* encodedText = (char*)malloc(sizeof(encodedText));
-	int* result = (int*)malloc(sizeof(result));
+char* encodedText(char* text, char* result, char* charList) {
+	int charIndex;
 	for (int i = 0; i < textLen(text); i++) {
-		if ((text[i] == charList[i]) && 
+		if (!isEncodable(text, charList)) 
+		{
+			return 0;
+		}
+		if ((text[i] == charList[i]) &&
 			(text[i] != NULL) &&
-			(charList[i] !=NULL)) 
+			(charList[i] != NULL))
 		{
 			if (text[i] == ' ') {
-				encodedText += '**';
+				result[i] += '**';
 			}
-			result += strcspn(charList, charList[i]);
-			encodedText += (char)result + '*';
+			charIndex = strcspn(charList, text);
+			result[i] += (charIndex + 1) + '*';
 		}
 	}
+	return result;
 }
 
 int main() {
 	char* text = (char*)malloc(sizeof(text));
-	char* charList = charList;
+	char* result = (char*)malloc(sizeof(result));
 	printf("Program szyfrujacy podany tekst\n");
 	printf("Wprowadz tekst: ");
 	scanf_s("%s", &text);
 	checkText(text, charList);
-
+	printf("Wprowadzony tekst: %s\n", text);
+	printf("Tekst po zaszyfrowaniu: %s\n", encodedText(text, result, charList));
 	return 0;
 }
