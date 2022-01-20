@@ -44,7 +44,7 @@ size_t charListLen(char charList[]) {
 
 bool isEncodable(char* text, char charList[]) {
 	for (size_t i = 0; i < textLen(text); i++) {
-		if ((text[i] == charList[i]) && 
+		if (((text[i] && text[i+1]) == charList[i]) &&
 			(charList[i] != NULL)) 
 		{
 			return true;
@@ -69,12 +69,11 @@ void checkText(char* text, char* charList)
 char* encodedText(char* text, char* result, char* charList) {
 	int charIndex;
 	for (int i = 0; i < textLen(text); i++) {
-		if (!isEncodable(text, charList)) 
-		{
+		if (!isEncodable(text, charList)) {
 			return 0;
 		}
-		if ((text[i] == charList[i]) &&
-			(text[i] != NULL) &&
+		if (((text[i] && text[i+1]) == charList[i]) &&
+			((text[i] && text[i+1]) != NULL) &&
 			(charList[i] != NULL))
 		{
 			if (text[i] == ' ') {
